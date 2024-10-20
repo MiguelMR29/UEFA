@@ -34,9 +34,14 @@ public class JugadorController {
 		return service.insertaJugador(obj);
 	}
 	
+	@GetMapping("/{id}")
+	public Optional<Jugador> busca(@PathVariable("id") int id) {
+		return service.buscaPorId(id);
+	}
+	
 	@PutMapping("/actualiza/{id}")
-	public Optional<Jugador> actualiza(@PathVariable int id, @RequestBody Jugador obj) {
-		return service.actualizaJugador(id, obj);
+	public Jugador actualiza(@RequestBody Jugador obj, @PathVariable Integer id) {
+	    return service.actualizaJugador(obj, id);
 	}
 	
 }

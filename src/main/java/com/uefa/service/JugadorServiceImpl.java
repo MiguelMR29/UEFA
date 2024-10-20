@@ -26,13 +26,20 @@ public class JugadorServiceImpl implements JugadorService {
 	}
 
 	@Override
-	public Optional<Jugador> actualizaJugador(int id, Jugador obj) {
-		return repository.findById(id).map(Jugador->{
-			Jugador.setNomJugador(obj.getNomJugador());
-			Jugador.setValorJugador(obj.getValorJugador());
-			Jugador.setPais(obj.getPais());
-			return repository.save(obj);
-		});
+	public Optional<Jugador> buscaPorId(int id){
+		return repository.findById(id);
+	}
+
+	@Override
+	public Jugador actualizaJugador(Jugador obj,Integer id) {
+		Jugador jugador = repository.findById(id).get();
+		
+		jugador.setNomJugador(obj.getNomJugador());
+		jugador.setValorJugador(obj.getValorJugador());
+		jugador.setPais(obj.getPais());
+		
+		return repository.save(jugador);
+		
 	}
 
 }
