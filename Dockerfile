@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copiamos el archivo JAR generado por el build de Maven/Gradle en la carpeta target
 # Cambia "UEFA-1.0.0.jar" por el nombre correcto de tu archivo JAR
-COPY target/UEFA-1.0.0.jar app.jar
+COPY target/*.jar app.jar
 
 # Exponemos el puerto en el que se ejecutará la aplicación Spring Boot
 EXPOSE 8090
