@@ -1,16 +1,25 @@
-# Usamos la imagen oficial de OpenJDK para Java 21 en Debian
-FROM eclipse-temurin:21-jdk
-
-# Establecer el directorio de trabajo dentro del contenedor
+# Fase 1: Compilación usando Maven y OpenJDK 21
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
-# Copiamos el archivo JAR generado por el build de Maven/Gradle en la carpeta target
-# Cambia "UEFA-1.0.0.jar" por el nombre correcto de tu archivo JAR
-COPY target/*/UEFA/target/UEFA-0.0.1-SNAPSHOT.jar app.jar
+# Copiar el archivo de configuración de Maven y el código fuente
+COPY pom.xml .
+COPY src ./src
 
-# Exponemos el puerto en el que se ejecutará la aplicación Spring Boot
+# Compilar el proyecto y generar el JAR
+RUN ./mvnw clean package -DskipTests
+
+# Fase 2: Ejecución
+FROM eclipse-temurin:21-jre  
+WORKDIR /app
+
+# Copiar el JAR desde la fase de construcción
+COPY --from=build /app/target/UEFA-0.0.1-SNAPSHOT.jar app.jar
+
+# Exponer el puerto que utiliza la aplicación
 EXPOSE 8090
 
-# Comando para ejecutar la aplicación Spring Boot
+# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
 
